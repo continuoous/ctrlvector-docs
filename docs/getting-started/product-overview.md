@@ -1,5 +1,8 @@
 # Product overview
 
+!!! warning "Page status: Draft"
+    The product framing is ready for review; interface and release-specific claims still require validation.
+
 ## Learning objectives
 
 After completing this chapter, you should be able to:

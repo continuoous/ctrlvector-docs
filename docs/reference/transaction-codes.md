@@ -1,5 +1,8 @@
 # Transaction-code reference
 
+!!! warning "Page status: Draft"
+    The initial families are documented. The catalogue will expand only with validated learner-facing chapters.
+
 A transaction code, or TCode, represents a user intention and an authorization boundary.
 
 ## Activity suffixes

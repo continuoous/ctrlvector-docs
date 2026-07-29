@@ -1,5 +1,8 @@
 # Learning paths
 
+!!! warning "Page status: Draft"
+    The role sequence is defined; lesson duration, assessment weight, and prerequisites remain to be validated.
+
 CtrlVector training is organized by role. Learners should complete the foundation modules before a specialist path.
 
 ## Foundation path

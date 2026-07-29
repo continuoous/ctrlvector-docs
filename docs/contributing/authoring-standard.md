@@ -1,8 +1,23 @@
 # Documentation authoring standard
 
+!!! warning "Page status: Draft"
+    This standard governs the initial handbook build and will be versioned after the pilot review.
+
 ## Purpose
 
 This standard keeps the handbook consistent enough for self-study, instructor-led training, and future certification.
+
+## Page lifecycle
+
+Every navigable page must display one status immediately below its title:
+
+| Status | Use when |
+|---|---|
+| Planned | The page defines scope and reading order but is not product guidance. |
+| Draft | The page contains substantive guidance that still requires product or editorial validation. |
+| Validated | The content has passed the review checklist for a stated product version or validation date. |
+
+Changing a page to **Validated** requires recording product applicability and completing the review checklist. A later product change returns affected content to **Draft** until it is checked again.
 
 ## Required chapter structure
 

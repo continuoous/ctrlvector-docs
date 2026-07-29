@@ -1,5 +1,8 @@
 # Glossary
 
+!!! warning "Page status: Draft"
+    Definitions are governed working terms and will be reviewed as the corresponding chapters are validated.
+
 **Analysis**
 : A governed analytical configuration instantiated for a business purpose.
 

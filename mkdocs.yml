@@ -37,16 +37,59 @@ theme:
 
 nav:
   - Home: index.md
-  - Getting started:
+  - Welcome to CtrlVector:
+      - Welcome: getting-started/index.md
       - Product overview: getting-started/product-overview.md
-      - Learning paths: training/learning-paths.md
-  - Concepts:
+      - Using this handbook: getting-started/using-this-handbook.md
+      - Choose a learning path: training/learning-paths.md
+  - Foundations:
+      - Foundations: concepts/index.md
       - Exact variance decomposition: concepts/variance-decomposition.md
+      - CtrlVector terminology: concepts/terminology.md
+      - Core business objects: concepts/core-business-objects.md
+  - Operating CtrlVector:
+      - Operating CtrlVector: operating/index.md
+      - End-to-end workflow: operating/end-to-end-workflow.md
+      - Prepare and submit data: operating/prepare-and-submit-data.md
+      - Finalize databases: operating/finalize-databases.md
+      - Create bridges: operating/create-bridges.md
+      - Review results: operating/review-results.md
   - Configuration:
+      - Configuration: configuration/index.md
       - Dimensions: configuration/dimensions.md
+      - Factors: configuration/factors.md
+      - Nodes and calculation structures: configuration/nodes.md
+      - Versions, calendars, and periods: configuration/time-and-versions.md
+      - Analyses and templates: configuration/analyses-and-templates.md
+      - Ownership and decision structures: configuration/ownership-and-decisions.md
+  - Analysis and interpretation:
+      - Analysis and interpretation: analysis/index.md
+      - Read a bridge: analysis/read-a-bridge.md
+      - Dimension drilldowns: analysis/dimension-drilldowns.md
+      - Mix and interaction effects: analysis/mix-and-interaction-effects.md
+      - Decision lenses and control vectors: analysis/decision-lenses-and-control-vectors.md
+      - Communicate conclusions: analysis/communicate-conclusions.md
+  - Administration and governance:
+      - Administration and governance: administration/index.md
+      - Environment setup: administration/environment-setup.md
+      - Access and roles: administration/access-and-roles.md
+      - Data governance: administration/data-governance.md
+      - Lifecycle management: administration/lifecycle-management.md
+      - Auditability and controls: administration/auditability-and-controls.md
+  - Practice and training:
+      - Practice and training: training/index.md
+      - Worked examples: training/worked-examples.md
+      - Guided exercises: training/guided-exercises.md
+      - Learning paths: training/learning-paths.md
+      - Knowledge checks: training/knowledge-checks.md
+      - Certification preparation: training/certification-preparation.md
   - Reference:
+      - Reference: reference/index.md
       - Transaction codes: reference/transaction-codes.md
+      - File and field reference: reference/file-and-field-reference.md
       - Glossary: reference/glossary.md
+      - Troubleshooting: reference/troubleshooting.md
+      - Formulas and conventions: reference/formulas-and-conventions.md
   - Contribute:
       - Authoring standard: contributing/authoring-standard.md
 

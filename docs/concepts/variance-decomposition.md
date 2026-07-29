@@ -1,5 +1,8 @@
 # Exact variance decomposition
 
+!!! warning "Page status: Draft"
+    The numerical example reconciles, but the chapter still requires an independent instructional review.
+
 ## Learning objectives
 
 After completing this chapter, you should be able to calculate a simple two-factor variance, distinguish pure and interaction effects, and verify exact reconciliation.
