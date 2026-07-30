@@ -12,6 +12,9 @@ A **Dimension Policy Template** (DPT) describes how a factor relates to governed
 
 The reusable template is created independently, then assigned to one or more factors. It protects calculations from adding values that should be retained, weighted, recomputed, or selected, and from silently inventing finer-grain values.
 
+!!! info "Terms used in this chapter"
+    **Governed dimension** means a registered business classification, such as Region, Product, Channel, or Period. **Grain** means the unique combination of dimension values represented by one fact, such as Region + Product. A **Bridge** is the calculation process that aligns configured factors at a shared grain and calculates their contribution to change.
+
 ## Learning objectives
 
 After completing this chapter, you should be able to:
@@ -51,7 +54,7 @@ The four transactions are modes of the same governed object. `DPT03` is read-onl
 
 | Field | Business question |
 |---|---|
-| **Role** | Is the dimension present in the source, missing but governed, or irrelevant to this template? |
+| **Role** | Is the dimension present in the source, missing but governed, or Not configured? |
 | **Rollup method** | If a native dimension is removed from the calculation grain, how is the value combined? |
 | **Expansion method** | If a missing dimension is requested, what finer-grain interpretation is allowed? |
 | **Allocation driver** | If a value is allocated, which factor supplies the relative weights? |
@@ -65,6 +68,27 @@ The four transactions are modes of the same governed object. `DPT03` is read-onl
 | **Missing/expansion target** | The dimension is absent from the source grain but finer-grain use is governed. | Expansion method | Rollup is `default` |
 
 There is no valid line with both a non-default rollup and a non-default expansion. Role makes them alternatives, not two independent calculations. Changing a role clears fields that no longer apply. Selecting an expansion other than `allocate` clears the allocation driver.
+
+### Decision path for one dimension
+
+```text
+Is the dimension relevant to this template?
+|
++-- No  -> Role = Not configured -> no saved policy line
+|
++-- Yes -> Is it present in the factor's source grain?
+          |
+          +-- Yes -> Role = Native/source
+          |          -> choose Rollup method
+          |          -> Expansion = default
+          |          -> Allocation driver = empty
+          |
+          +-- No  -> Role = Missing/expansion target
+                     -> Rollup = default
+                     -> choose Expansion method
+                     -> if Allocate: driver required
+                     -> otherwise: driver empty
+```
 
 ## Two validation gates
 
@@ -97,23 +121,27 @@ Each value in a method cell is a separate valid combination for that behavior an
 | Factor behavior | Role | Valid active method | Allocation driver |
 |---|---|---|---|
 | Additive | Native/source | `default` or `sum` rollup | Empty |
-| Additive | Missing/expansion target | `default` or `reject` expansion | Empty |
-| Additive | Missing/expansion target | `allocate` expansion | Required |
+| Additive | Missing/expansion target | `default`, `reject`, or `allocate` expansion‡ | Required only for `allocate`; otherwise empty |
 | Invariant | Native/source | `default` or `retain` rollup | Empty |
-| Invariant | Missing/expansion target | `default`, `reject`, or `broadcast` expansion | Empty |
+| Invariant | Missing/expansion target | `default`, `reject`, or `broadcast` expansion‡ | Empty |
 | Weighted rate | Native/source | `default` or `weighted_average` rollup | Empty |
-| Weighted rate | Missing/expansion target | `default`, `reject`, or `broadcast` expansion | Empty |
+| Weighted rate | Missing/expansion target | `default`, `reject`, or `broadcast` expansion‡ | Empty |
 | Ratio | Native/source | `default` or `recompute_ratio` rollup | Empty |
-| Ratio | Missing/expansion target | `default`, `reject`, `broadcast`, or `recompute` expansion | Empty |
+| Ratio | Missing/expansion target | `default`, `reject`, `broadcast`, or `recompute` expansion‡ | Empty |
 | Compositional share | Native/source | `default` or `recompute_share` rollup | Empty |
-| Compositional share | Missing/expansion target | `default`, `reject`, `broadcast`, or `recompute` expansion | Empty |
+| Compositional share | Missing/expansion target | `default`, `reject`, `broadcast`, or `recompute` expansion‡ | Empty |
 | Snapshot | Native/source | `default` or `select` rollup | Empty |
-| Snapshot | Missing/expansion target | `default`, `reject`, or `broadcast` expansion | Empty |
-| Semi-additive | Native/source | `default`, `dimension_policy`, `sum`, `retain`, `weighted_average`, or `select` rollup | Empty |
-| Semi-additive | Missing/expansion target | `default`, `reject`, or `broadcast` expansion | Empty |
-| Semi-additive | Missing/expansion target | `allocate` expansion | Required |
+| Snapshot | Missing/expansion target | `default`, `reject`, or `broadcast` expansion‡ | Empty |
+| Semi-additive | Native/source | `default`†, `dimension_policy`†, `sum`, `retain`, `weighted_average`§, or `select` rollup | Empty |
+| Semi-additive | Missing/expansion target | `default`, `reject`, `broadcast`, or `allocate` expansion‡ | Required only for `allocate`; otherwise empty |
 
 For every behavior, **Not configured** is also valid and creates no policy line.
+
+† **Unresolved marker:** not an executable method by itself. A removal step hard-stops unless exactly one concrete supported method remains after unresolved markers are ignored.
+
+‡ **Metadata only:** valid configuration, but the current common-grain Bridge does not execute expansion or create target rows.
+
+§ **Hard stop if invoked:** `weighted_average` is valid Semi-additive configuration, but the current Bridge cannot execute it as a Semi-additive rollup.
 
 ### What `default` means
 
@@ -129,7 +157,27 @@ For every behavior, **Not configured** is also valid and creates no policy line.
 | Snapshot | `select` | `reject` |
 | Semi-additive | Dimension-specific policy must supply the operative method | `reject` |
 
-An explicit expansion records a deliberate exception. For example, a Ratio defaults to rejecting expansion but may explicitly use `broadcast` or `recompute`.
+When `default` resolves to the same method as an explicit choice, their governed meaning is the same and, where the method is currently executed, the calculation is the same. For example, Additive expansion `default` and explicit `reject` both mean reject. Choose:
+
+- `default` when the template should inherit the assigned behavior and remain more portable;
+- the explicit matching method when DPT03 should show that the decision was deliberately pinned and auditable.
+
+An explicit method can become incompatible if the assigned factor behavior changes; `default` inherits the new behavior when the resulting assignment is otherwise valid.
+
+!!! note "Similar names in different fields"
+    `recompute_ratio` and `recompute_share` are **rollup_method** values. The shorter `recompute` is an **expansion_method** value used for either Ratio or Compositional share. These are exact current product and DPT09 values. Always read the CSV column as well as the method name; do not put `recompute` in `rollup_method` or `recompute_ratio` in `expansion_method`.
+
+## Execution-status conventions
+
+The current runtime has three distinct outcomes:
+
+| Status used below | Operational result |
+|---|---|
+| **Executed** | The current common-grain Bridge performs the native rollup. |
+| **Hard stop if invoked** | The configuration can be saved, but a Bridge that must use an unsupported, unresolved, or conflicting Semi-additive rollup fails at grain preparation. No result from that Bridge step is produced. |
+| **Metadata only** | The expansion can be saved and behavior-validated, but the current common-grain Bridge does not attempt expansion. It can continue at its available grain; it neither creates target rows nor fails merely because the expansion line exists. |
+
+The two not-yet-executed statuses differ: an unsupported Semi-additive rollup fails when required, while an expansion-target line is currently not invoked.
 
 ## Numerical explanation of every rollup
 
@@ -180,8 +228,8 @@ The simple average `(10.00 + 20.00) / 2 = 15.00` is incorrect. Units is the Weig
 
 Valid behaviors: Weighted rate and Semi-additive.
 
-!!! warning "Current Semi-additive limitation"
-    `weighted_average` is accepted for Semi-additive configuration, but the current common-grain Bridge path does not execute it as a Semi-additive rollup. If that dimension must be removed, the Bridge stops rather than silently applying another method.
+!!! failure "Hard stop if invoked"
+    `weighted_average` is accepted for Semi-additive configuration, but the current common-grain Bridge does not execute it as a Semi-additive rollup. If that dimension must be removed, grain preparation raises an unsupported-method error and that Bridge step produces no result.
 
 ### `recompute_ratio`
 
@@ -225,15 +273,32 @@ Use for a Snapshot, or a Semi-additive factor on a snapshot-like dimension.
 | February | 120 |
 | March | 110 |
 
-Removing Period selects the governed final observation, **110**. Summing to `330` is invalid because these are successive states.
+Removing Period should select the governed final observation, **110**. Summing to `330` is invalid because these are successive states.
 
-The current Bridge chooses the deterministic latest native index. Source ordering and Period governance must identify the intended final observation reliably.
+The current implementation sorts the internal native `idx` value as text and selects the final row in that order. It does not inspect a Period field or business timestamp to determine chronology. March is selected in this example only if the `idx` ordering places the March row last. If `idx` values are arbitrary identifiers, do not assume that `select` means chronologically latest; validate the source index contract before relying on the result.
 
 Valid behaviors: Snapshot and Semi-additive.
 
 ### `dimension_policy`
 
-`dimension_policy` is the Semi-additive master marker. It means the operative rollup is governed dimension by dimension; it performs no arithmetic by itself.
+`dimension_policy` is a valid Semi-additive rollup token that marks a native dimension as governed without naming a concrete operation. It performs no arithmetic and does not change DPT09 validation.
+
+For example, this DPT09 line is structurally valid and can be assigned only to a Semi-additive factor:
+
+```csv
+template_name,dimension_name,role,rollup_method,expansion_method,allocation_driver_factor
+Closing Inventory Grain,Region,native,dimension_policy,,
+```
+
+DPT03 saves and displays `dimension_policy` exactly as written. During current Bridge grain preparation, `default` and `dimension_policy` are excluded when CtrlVector identifies the concrete method for all dimensions removed in that step:
+
+- if no concrete method remains, the step fails because no operation is defined;
+- if exactly one concrete method remains, that one method is applied to the whole removal step, including dimensions marked `dimension_policy`;
+- if more than one concrete method remains, the step fails because the methods conflict.
+
+For example, if Region is `dimension_policy` and Period is `select`, removing Region alone fails, while removing both causes the whole step to use `select`. It does **not** mean "sum Region, then select Period."
+
+Use `dimension_policy` only to record that the operative method is deliberately deferred. For a calculation-ready template, replace it with a concrete supported method such as `sum`, `retain`, or `select`.
 
 For Closing inventory:
 
@@ -242,28 +307,31 @@ For Closing inventory:
 | January | 60 | 40 |
 | February | 70 | 50 |
 
-Configure Region as `sum` and Period as `select`.
+After resolving the deferred policies, configure Region as `sum` and Period as `select`.
 
 - Removing Region gives January `60 + 40 = 100` and February `70 + 50 = 120`.
 - Removing Period while retaining Region selects February: North `70`, South `50`.
-- Removing both should sum within Period, then select February, producing `120`.
+- The business-required two-stage result after removing both would sum within Period, then select February, producing `120`.
 
-The current Bridge does not execute that ordered two-stage rollup in one step. All dimensions removed in one step must use one consistent supported method. Retain one dimension until ordered Semi-additive aggregation is supported.
+The current DPT model has no field for operation order. Worksheet row order and DPT09 CSV row order do not define calculation order. The current Bridge does not execute that two-stage rollup: all dimensions removed in one step must use one consistent supported method.
 
-`default` and `dimension_policy` are valid markers, but a Semi-additive dimension that will be removed should have a concrete supported method.
+!!! failure "Hard stop if invoked"
+    If one Bridge step finds no concrete method after ignoring `default` and `dimension_policy`, or finds more than one concrete method, grain preparation raises an error and the step produces no result. Retain a dimension or configure one consistent concrete supported method. Any future ordered-rollup semantics require a separate product design; this Draft does not infer them from source-grain nesting or line order.
 
 ## Numerical explanation of every expansion
 
 Expansion applies only to a **Missing/expansion target** and describes the permitted finer-grain interpretation.
 
-!!! important "Current execution boundary"
-    The current Bridge common-grain path executes native-dimension rollup. It does not yet create finer-grain facts from expansion-target policies. These examples define governed and reconcilable semantics; they do not claim that the current Bridge performs the expansion.
+!!! caution "Metadata only"
+    The current common-grain Bridge does not read expansion-target lines to create finer-grain facts. It can continue at the available common grain without creating target rows and without failing merely because an expansion line exists. The examples below define governed future semantics, not current expansion execution.
 
 ### `reject`
 
-Legal provision is `500` at Region level. Channel is missing and has no defensible driver. A Channel request stops instead of inventing Air `500` and Ocean `500`, or assuming an unsupported `250 / 250` split.
+Legal provision is `500` at Region level. Channel is missing and has no defensible driver. The governed meaning of `reject` is that an expansion-capable workflow must stop instead of inventing Air `500` and Ocean `500`, or assuming an unsupported `250 / 250` split. The current common-grain Bridge does not attempt that request, so this metadata line itself does not fail the run.
 
 Valid behaviors: all current behaviors.
+
+**Runtime status - Metadata only:** the current Bridge does not invoke `reject` expansion, so this policy line does not currently stop a run or create target rows.
 
 ### `broadcast`
 
@@ -281,6 +349,8 @@ For a Weighted rate, Ratio, Compositional share, or Snapshot, broadcast similarl
 
 Valid behaviors: Invariant, Weighted rate, Ratio, Compositional share, Snapshot, and Semi-additive.
 
+**Runtime status - Metadata only:** the current Bridge does not currently produce the repeated target rows illustrated above.
+
 ### `allocate`
 
 Balance Sheet Release is `300`. Channel Units supplies weights:
@@ -295,6 +365,8 @@ Balance Sheet Release is `300`. Channel Units supplies weights:
 The reconciliation is `180 + 90 + 30 = 300`. The allocation driver is mandatory and must identify a known factor.
 
 Valid behaviors: Additive and Semi-additive.
+
+**Runtime status - Metadata only:** the current Bridge does not currently produce the `180 / 90 / 30` allocation illustrated above.
 
 ### `recompute`
 
@@ -312,6 +384,8 @@ For a Compositional share, target weights `20`, `50`, and `30` recompute to `20%
 `recompute` does not use the DPT allocation driver. Ratio components and Compositional-share weights are configured on the factor.
 
 Valid behaviors: Ratio and Compositional share.
+
+**Runtime status - Metadata only:** the current Bridge does not currently produce these recomputed target values.
 
 ## Do not confuse supporting factors
 
@@ -386,7 +460,7 @@ Use `native` or `expansion` for `role`. A Not-configured dimension has no MDPOL 
 
 - Native: supply `rollup_method`; leave expansion and driver empty.
 - Expansion: leave rollup empty; supply `expansion_method`; supply a driver only for `allocate`.
-- An empty applicable method is normalized to `default`.
+- A blank applicable method cell and the literal value `default` are equivalent: both save the applicable method as `default`.
 
 Example `MDDPT`:
 
@@ -454,6 +528,9 @@ For source value `400` and driver values Air `50`, Ocean `30`, Surface `20`, ver
 - Surface: `400 x 20% = 80`
 - total: `200 + 120 + 80 = 400`
 
+!!! caution "Paper/governance exercise"
+    The `400 -> 200 / 120 / 80` split tests the policy's intended arithmetic and reconciliation only. The current Bridge does not execute the allocation or produce these Channel rows.
+
 Then design Closing inventory as Semi-additive: Region `sum`, Period `select`. With January North `40`, South `60`, and February North `55`, South `65`:
 
 - removing Region gives January `100` and February `120`;
@@ -470,6 +547,10 @@ Then design Closing inventory as Semi-additive: Region `sum`, Period `select`. W
 6. Why is `dimension_policy` not a complete arithmetic instruction?
 7. When does DPT09 data become persistent?
 8. Does the current Bridge execute expansion targets?
+9. How does current `select` determine which source row is final?
+10. How does **Hard stop if invoked** differ from **Metadata only**?
+
+Select **Answers** to reveal the response key.
 
 ??? example "Answers"
     1. Creation has no factor behavior; assignment applies behavior-specific validation.
@@ -480,6 +561,8 @@ Then design Closing inventory as Semi-additive: Region `sum`, Period `select`. W
     6. It marks Semi-additive governance but does not select a concrete operation.
     7. On Commit of a valid staged preview.
     8. No. The current common-grain path executes native rollup only.
+    9. It sorts the internal native `idx` as text and takes the last row; it does not interpret Period or a timestamp.
+    10. A required unsupported Semi-additive rollup raises an error and stops the Bridge step. Expansion metadata is not invoked, so the Bridge may continue without creating expanded rows.
 
 ## Related material
 
