@@ -18,4 +18,4 @@ Explain how measurable business drivers are governed and made available to node 
 
 ## Prerequisite
 
-Complete [Dimensions](dimensions.md) and [Core business objects](../concepts/core-business-objects.md).
+Complete [Dimensions](dimensions.md), review [Dimension Policy Templates](dimension-policy-templates.md), and read [Core business objects](../concepts/core-business-objects.md).

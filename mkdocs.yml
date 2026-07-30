@@ -57,6 +57,7 @@ nav:
   - Configuration:
       - Configuration: configuration/index.md
       - Dimensions: configuration/dimensions.md
+      - Dimension policy templates: configuration/dimension-policy-templates.md
       - Factors: configuration/factors.md
       - Nodes and calculation structures: configuration/nodes.md
       - Versions, calendars, and periods: configuration/time-and-versions.md

@@ -41,6 +41,8 @@ Create Calendars before Periods because each Period belongs to a registered Cale
 | ALS | Aliases | `ALS01` | `ALS02` | `ALS03` | `ALS09` |
 | OWN | Owner Assignments | `OWN01` | `OWN02` | `OWN03` | `OWN09` |
 
+See [Dimension Policy Templates](../configuration/dimension-policy-templates.md) for the detailed DPT role, method, compatibility, numerical, and bulk-file guidance.
+
 The main dependency order is:
 
 1. create Dimensions before Dimension Policy Templates and Decision Lenses;
