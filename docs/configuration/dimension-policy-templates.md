@@ -132,16 +132,20 @@ Each value in a method cell is a separate valid combination for that behavior an
 | Compositional share | Missing/expansion target | `default`, `reject`, `broadcast`, or `recompute` expansion‡ | Empty |
 | Snapshot | Native/source | `default` or `select` rollup | Empty |
 | Snapshot | Missing/expansion target | `default`, `reject`, or `broadcast` expansion‡ | Empty |
-| Semi-additive | Native/source | `default`†, `dimension_policy`†, `sum`, `retain`, `weighted_average`§, or `select` rollup | Empty |
+| Semi-additive | Native/source | `default`¶, `dimension_policy`†, `sum`, `retain`, `weighted_average`§, or `select` rollup | Empty |
 | Semi-additive | Missing/expansion target | `default`, `reject`, `broadcast`, or `allocate` expansion‡ | Required only for `allocate`; otherwise empty |
 
 For every behavior, **Not configured** is also valid and creates no policy line.
 
-† **Unresolved marker:** not an executable method by itself. A removal step hard-stops unless exactly one concrete supported method remains after unresolved markers are ignored.
+Unmarked method cells are executed as written by the current common-grain Bridge. Marked cells have the runtime caveat defined below.
+
+¶ **Semi-additive `default`:** inherits the behavior-level `dimension_policy` marker, which is non-concrete; a dimension-specific policy must supply the operative method. A removal step still needs exactly one concrete supported method after `default` and `dimension_policy` values are ignored.
+
+† **Explicit unresolved marker:** `dimension_policy` deliberately records that no concrete method is named on this line. A removal step hard-stops unless exactly one concrete supported method remains after unresolved markers are ignored.
 
 ‡ **Metadata only:** valid configuration, but the current common-grain Bridge does not execute expansion or create target rows.
 
-§ **Hard stop if invoked:** `weighted_average` is valid Semi-additive configuration, but the current Bridge cannot execute it as a Semi-additive rollup.
+§ **Hard stop if invoked:** `weighted_average` is a concrete and valid Semi-additive method, but the current Bridge cannot execute it as a Semi-additive rollup. Unlike ¶ and †, it is resolved in meaning but not yet implemented for this behavior. It can satisfy the exactly-one-concrete-method consistency check, then fail the implementation check during the same grain-preparation stage.
 
 ### What `default` means
 
@@ -155,7 +159,7 @@ For every behavior, **Not configured** is also valid and creates no policy line.
 | Ratio | `recompute_ratio` | `reject` |
 | Compositional share | `recompute_share` | `reject` |
 | Snapshot | `select` | `reject` |
-| Semi-additive | Dimension-specific policy must supply the operative method | `reject` |
+| Semi-additive | Inherits the behavior-level `dimension_policy` marker, which is non-concrete; a dimension-specific policy must supply the operative method | `reject` |
 
 When `default` resolves to the same method as an explicit choice, their governed meaning is the same and, where the method is currently executed, the calculation is the same. For example, Additive expansion `default` and explicit `reject` both mean reject. Choose:
 
