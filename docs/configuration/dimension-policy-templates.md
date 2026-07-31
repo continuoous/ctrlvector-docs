@@ -69,6 +69,9 @@ The four transactions are modes of the same governed object. `DPT03` is read-onl
 
 There is no valid line with both a non-default rollup and a non-default expansion. Role makes them alternatives, not two independent calculations. Changing a role clears fields that no longer apply. Selecting an expansion other than `allocate` clears the allocation driver.
 
+!!! tip "What factor source grain means"
+    A factor's **source grain** is the level of dimensional detail at which that factor's data is provided to CtrlVector. If Freight Cost input records contain Region, Product, and Channel, its source grain is `Region x Product x Channel`, and those three dimensions are Native/source dimensions. A dimension absent from those input records is not part of the source grain; configure it as a Missing/expansion target when finer-grain use must be governed, or leave it Not configured when it is irrelevant to the policy. Source grain describes the incoming factor data before Bridge rollup or any planned expansion.
+
 ### Decision path for one dimension
 
 ```text
