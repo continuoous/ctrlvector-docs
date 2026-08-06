@@ -358,6 +358,80 @@ Valid behaviors: Invariant, Weighted rate, Ratio, Compositional share, Snapshot,
 
 **Runtime status - Metadata only:** the current Bridge does not currently produce the repeated target rows illustrated above.
 
+#### Worked example: additive by Country and Product, broadcast by Mode of Transport
+
+`HW KUnits` is additive across Country and Product, but the same Country + Product value must be visible under every Mode of Transport. This makes the factor **Semi-additive**: its aggregation meaning changes by dimension.
+
+In FAC02, configure the factor as follows:
+
+| Field | Value |
+|---|---|
+| Factor | `HW KUnits` |
+| Behavior | Semi-additive amount |
+| Dimension policy | `Revenue Units` |
+| Format | `#` or `KUnits` |
+| Behavior references | None required |
+
+Do not configure the factor as Invariant: that would incorrectly prevent summation across Country and Product. Do not configure it as Additive: Additive permits `sum`, `reject`, or `allocate`, but not `broadcast`.
+
+The true source input is at Country + Product grain and contains four facts:
+
+| Country | Product | HW KUnits |
+|---|---|---:|
+| Canada | Product A | 30 |
+| Canada | Product B | 40 |
+| United States | Product A | 70 |
+| United States | Product B | 60 |
+
+In DPT02, configure `Revenue Units` as follows:
+
+| Dimension | Role | Rollup method | Expansion method | Allocation driver |
+|---|---|---|---|---|
+| Country | Native/source dimension | `sum` | `default` | Empty |
+| Product | Native/source dimension | `sum` | `default` | Empty |
+| Mode of Transport | Missing/expansion target | `default` | `broadcast` | Empty |
+
+No allocation driver is used: broadcast repeats a governed value; it does not split the value by weights.
+
+The source total is:
+
+```text
+30 + 40 + 70 + 60 = 200 HW KUnits
+```
+
+The governed broadcast interpretation is:
+
+| Mode of Transport | Country | Product | HW KUnits |
+|---|---|---|---:|
+| Air | Canada | Product A | 30 |
+| Ocean | Canada | Product A | 30 |
+| Surface | Canada | Product A | 30 |
+| Air | Canada | Product B | 40 |
+| Ocean | Canada | Product B | 40 |
+| Surface | Canada | Product B | 40 |
+| Air | United States | Product A | 70 |
+| Ocean | United States | Product A | 70 |
+| Surface | United States | Product A | 70 |
+| Air | United States | Product B | 60 |
+| Ocean | United States | Product B | 60 |
+| Surface | United States | Product B | 60 |
+
+Each Mode of Transport view contains the same total:
+
+```text
+Air = 200
+Ocean = 200
+Surface = 200
+```
+
+The three mode totals are repeated views of one quantity. They must not be summed as `200 + 200 + 200 = 600`; the governed HW KUnits total remains `200`.
+
+!!! warning "Confirm which table is the source"
+    The four-row Country + Product table is the source in this design. The twelve-row table illustrates the intended result after broadcast. If all twelve rows are physically supplied as input, Mode of Transport is already present in the source grain and must instead be configured as Native/source with `retain`; otherwise an ordinary sum would triple-count the factor.
+
+!!! caution "Metadata only"
+    This example defines the correct FAC02 and DPT02 governance. The current common-grain Bridge does not yet execute `broadcast` or manufacture the twelve Mode of Transport rows. Do not expect the current Bridge run to perform the `4 -> 12` expansion.
+
 ### `allocate`
 
 Balance Sheet Release is `300`. Channel Units supplies weights:
