@@ -327,6 +327,9 @@ The current DPT model has no field for operation order. Worksheet row order and 
 
 ## Numerical explanation of every expansion
 
+!!! info "Executed exception: factor derivation broadcast"
+    Ordinary common-grain Bridge expansion remains metadata only. During finalized-database preparation, however, a factor derivation can broadcast a coarser source across active leaf members before applying its configured operation. Every dimension missing from that source must be configured explicitly as **Missing/expansion target** with `broadcast`. This exception does not execute `reject`, `allocate`, or `recompute` as standalone expansion methods; Project Sum retains its separate dimension-removal contract.
+
 Expansion applies only to a **Missing/expansion target** and describes the permitted finer-grain interpretation.
 
 !!! caution "Metadata only"
@@ -356,7 +359,7 @@ For a Weighted rate, Ratio, Compositional share, or Snapshot, broadcast similarl
 
 Valid behaviors: Invariant, Weighted rate, Ratio, Compositional share, Snapshot, and Semi-additive.
 
-**Runtime status - Metadata only:** the current Bridge does not currently produce the repeated target rows illustrated above.
+**Runtime status - Context dependent:** ordinary common-grain Bridge expansion remains metadata only. During finalized-database preparation, a factor derivation executes `broadcast` for a coarser source when every missing target dimension is explicitly governed as broadcast.
 
 #### Worked example: additive by Country and Product, broadcast by Mode of Transport
 
@@ -429,8 +432,8 @@ The three mode totals are repeated views of one quantity. They must not be summe
 !!! warning "Confirm which table is the source"
     The four-row Country + Product table is the source in this design. The twelve-row table illustrates the intended result after broadcast. If all twelve rows are physically supplied as input, Mode of Transport is already present in the source grain and must instead be configured as Native/source with `retain`; otherwise an ordinary sum would triple-count the factor.
 
-!!! caution "Metadata only"
-    This example defines the correct FAC02 and DPT02 governance. The current common-grain Bridge does not yet execute `broadcast` or manufacture the twelve Mode of Transport rows. Do not expect the current Bridge run to perform the `4 -> 12` expansion.
+!!! note "Where this broadcast executes"
+    A DPT does not manufacture rows by itself. CtrlVector executes the broadcast when a governed calculation needs a finer grain. This includes finalized-database preparation when HW KUnits is a coarser source of a **Product factor derivation**, such as `XFactory = HW KUnits × MoT Mix`, and Bridge node preparation when every node factor can be aligned to the union grain through explicit `broadcast` policies. Derived facts and Bridge preparation both retain source and broadcast lineage.
 
 ### `allocate`
 
@@ -502,6 +505,8 @@ CtrlVector confirms the save and displays the persisted lines.
 5. Open `DPT03` and verify the result.
 
 Saving replaces the complete set of policy lines. A line changed to **Not configured** is removed.
+
+The saved template name cannot currently be changed in DPT02. Update its description or policy lines, or create a new template when a different name is required.
 
 Choose **Delete** only when the template is no longer needed. Deletion is rejected while factors reference it. `DPT02` also provides **New** for creating another template.
 
@@ -596,7 +601,7 @@ Upload stages data; Commit persists it. A header name already in CtrlVector upda
 | DPT09 reports an unknown dimension or driver | A business name does not resolve. | Correct the name or create the prerequisite object. |
 | DPT09 reports a missing header | MDPOL refers to a name absent from uploaded MDDPT. | Add or correct the header. |
 | Valid Semi-additive setup blocks a Bridge | Removed dimensions use mixed, unresolved, or currently unsupported methods. | Retain a dimension or use one consistent supported method in that step. |
-| Expansion does not change results | Current Bridge does not manufacture finer-grain facts. | Treat expansion as governed metadata until its execution phase is available. |
+| Expansion does not change results | A DPT is governance metadata until a supported calculation invokes it. Governed `broadcast` executes for factor derivations and compatible multi-factor Bridge nodes; other contexts may not expand rows. | Confirm the execution context. Do not expect standalone, `reject`, `allocate`, or `recompute` expansion to create rows. |
 
 ## Practice
 
@@ -627,7 +632,7 @@ Then design Closing inventory as Semi-additive: Region `sum`, Period `select`. W
 5. How do `broadcast` and `recompute` differ for a Ratio?
 6. Why is `dimension_policy` not a complete arithmetic instruction?
 7. When does DPT09 data become persistent?
-8. Does the current Bridge execute expansion targets?
+8. Which expansion path is currently executed?
 9. How does current `select` determine which source row is final?
 10. How does **Hard stop if invoked** differ from **Metadata only**?
 
@@ -641,7 +646,7 @@ Select **Answers** to reveal the response key.
     5. Broadcast repeats the aggregate value; recompute recalculates from target numerator and denominator facts.
     6. It marks Semi-additive governance but does not select a concrete operation.
     7. On Commit of a valid staged preview.
-    8. No. The current common-grain path executes native rollup only.
+    8. Governed `broadcast` executes during finalized-database preparation when a coarser source feeds a factor derivation and every missing target dimension is explicitly configured for broadcast. Ordinary common-grain Bridge expansion and the other expansion methods remain unexecuted.
     9. It sorts the internal native `idx` as text and takes the last row; it does not interpret Period or a timestamp.
     10. A required unsupported Semi-additive rollup raises an error and stops the Bridge step. Expansion metadata is not invoked, so the Bridge may continue without creating expanded rows.
 
@@ -655,4 +660,4 @@ Select **Answers** to reveal the response key.
 
 ## Product applicability
 
-This Draft applies to the current Dimension Policy Template workbench, `MDDPT`/`MDPOL` bulk contract, factor-behavior compatibility rules, and native-dimension common-grain Bridge behavior reviewed on 30 July 2026. Revalidate it when DPT fields, compatibility rules, Semi-additive execution, or finer-grain expansion behavior changes.
+This Draft applies to the current Dimension Policy Template workbench, `MDDPT`/`MDPOL` bulk contract, factor-behavior compatibility rules, native-dimension common-grain Bridge behavior, and governed factor-derivation broadcast reviewed on 7 August 2026. Revalidate it when DPT fields, compatibility rules, Semi-additive execution, or finer-grain expansion behavior changes.

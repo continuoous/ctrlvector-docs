@@ -1,13 +1,13 @@
 # Configure factors
 
-!!! info "Page status: Planned"
-    Factor behavior, policy, and maintenance procedures still require validation.
+!!! warning "Page status: Draft"
+    This chapter includes current FAC02 derivation and behavior guidance. It requires product-owner and learner-clarity review before validation.
 
 ## Chapter purpose
 
 Explain how measurable business drivers are governed and made available to node calculations.
 
-## Planned coverage
+## Chapter coverage
 
 - factor identity, meaning, behavior, and status;
 - source and derived factors;
@@ -80,7 +80,53 @@ At the total grain, CtrlVector recomputes the weighted average as:
 Use **Weighted rate** behavior instead when the weighted numerator is only an implementation detail and does not need to be exposed as its own reusable factor.
 
 !!! note "Product validation"
-    The two source factors and the target must have compatible native dimension grains. Their formats do not need to be identical: for example, `USD/unit × units` may produce a target formatted as `USD`. Configure the target format explicitly in FAC02.
+    A source may either have the target's native grain or be a strict subset of it. A coarser source is accepted only when its Dimension Policy Template explicitly configures every missing target dimension as **Missing/expansion target** with `broadcast`. Their formats do not need to be identical: for example, `USD/unit × units` may produce a target formatted as `USD`. Configure the target format explicitly in FAC02.
+
+### Derivations with governed broadcast
+
+Derivation finalization can align a coarser source to a finer target before applying the configured operation. This is useful when a quantity is supplied at one business grain and another source is available at additional dimensions. Product provides the clearest example.
+
+Suppose HW KUnits is supplied at Country + Product grain:
+
+| Country | Product | HW KUnits |
+| --- | --- | ---: |
+| Canada | Laptops | 30 |
+
+MoT Mix is supplied at Country + Product + Mode of Transport grain:
+
+| Country | Product | Mode of Transport | MoT Mix |
+| --- | --- | --- | ---: |
+| Canada | Laptops | Air | 50% |
+| Canada | Laptops | Ocean | 30% |
+| Canada | Laptops | Surface | 20% |
+
+Configure HW KUnits as Semi-additive, with Country and Product native and Mode of Transport set to missing/`broadcast`. Configure MoT Mix and the derived XFactory at the full three-dimension grain. Then define:
+
+`XFactory = HW KUnits × MoT Mix`
+
+During finalized-database preparation, CtrlVector repeats the governed HW KUnits value across the active leaf members of Mode of Transport and joins both sources at the XFactory grain:
+
+| Mode of Transport | Calculation | XFactory |
+| --- | ---: | ---: |
+| Air | `30 × 50%` | 15 |
+| Ocean | `30 × 30%` | 9 |
+| Surface | `30 × 20%` | 6 |
+| **Total** |  | **30** |
+
+This is controlled expansion, not duplicated input. The finalized derived rows retain lineage to the original source rows and identify which dimension was broadcast.
+
+The same governed alignment applies when another derivation operation has a coarser source. For example, if KG Per Unit is supplied by Product while Fill Rate is supplied by Country + Product + Mode, `Weight = KG Per Unit ÷ Fill Rate` broadcasts KG Per Unit across its explicitly governed missing Country and Mode dimensions before division. Each operation still keeps its own rules: Ratio divides numerator by denominator, Sum and Difference combine aligned coordinates, Copy repeats one governed source, and Project Sum remains the separate operation for removing sum-governed dimensions.
+
+The same factor policies can also govern a multi-factor PR Node. Suppose Freight Spend is defined as:
+
+`HW KUnits × MoT Mix × Weight × Rate Per KG`
+
+HW KUnits may be native to Country + Product and broadcast to Mode, while Rate Per KG may be native to Country + Mode and broadcast to Product. If MoT Mix and Weight are already native to all three dimensions, Bridge preparation aligns all four factors to Country + Product + Mode before decomposition. BRRES can then attribute the change to the four factors and their interactions without requiring duplicate input rows.
+
+Using the derived Weight factor deliberately combines the effects of its own sources. If `Weight = KG Per Unit ÷ Fill Rate`, the Freight Spend Node exposes one Weight effect rather than separate KG Per Unit and Fill Rate effects.
+
+!!! failure "When finalization stops"
+    CtrlVector rejects the derivation if a missing target dimension is not explicitly governed as `broadcast`. Finalization also stops for missing source facts, duplicate source coordinates, an empty active-leaf expansion domain, a zero Ratio denominator, or an unresolved derivation chain. It does not silently invent a split or choose a member.
 
 ### Ratio configuration sequence
 

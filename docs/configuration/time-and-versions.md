@@ -1,13 +1,13 @@
 # Configure versions, calendars, and periods
 
-!!! info "Page status: Planned"
-    Time-axis and version-maintenance procedures still require validation.
+!!! warning "Page status: Draft"
+    This chapter includes current PER02 period-position guidance. It requires product-owner and learner-clarity review before validation.
 
 ## Chapter purpose
 
 Explain how CtrlVector gives business meaning and governed time context to submitted values and comparisons.
 
-## Planned coverage
+## Chapter coverage
 
 - Actual, Budget, Forecast, and other version meanings;
 - calendars, period grains, parent periods, and sequence;
