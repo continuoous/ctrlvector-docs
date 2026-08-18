@@ -5,6 +5,8 @@
 
 A transaction code, or **TCode**, represents a business intention and an authorization boundary. Use a TCode when you know the object and activity you need to perform; use the Central Hub when you want CtrlVector to show setup and operating readiness.
 
+Home and F3 return to VHOME and place keyboard focus in the primary **Open TCode** field, allowing the next transaction code to be entered immediately.
+
 ## Standard activity suffixes
 
 Four suffixes are used consistently across the standardized configuration families:

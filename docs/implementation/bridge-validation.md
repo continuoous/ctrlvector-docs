@@ -70,6 +70,8 @@ Enable **Show Per Unit Impact** only when the Node has an approved unit Factor.
 
 Check that:
 
+- the **Per-unit denominator reference** reconciles `eligible impact ÷ current denominator = per-unit movement` for each Node;
+- the denominator row identifies the unit Factor and active-scope quantity;
 - the denominator reflects native units without counting broadcast copies multiple times;
 - filtered views use the applicable denominator at that scope;
 - standard Factor Analysis controls are disabled while per-unit mode is active;
@@ -88,4 +90,3 @@ Check that:
 - [ ] Open defects and deferred capabilities are recorded separately
 
 The implementation is ready for review when every applicable check has evidence, not merely when the Bridge reports success.
-
