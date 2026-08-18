@@ -11,6 +11,7 @@ This handbook is being developed for business users, analysts, configuration spe
 
 - New to the product? Start with [Product overview](getting-started/product-overview.md).
 - Learning the analytical method? Continue to [Exact variance decomposition](concepts/variance-decomposition.md).
+- Implementing a model? Follow the [CtrlVector implementation guide](implementation/index.md).
 - Configuring the product? Use the validated [Dimensions](configuration/dimensions.md) pilot chapter.
 - Following a role-based curriculum? [Choose a learning path](training/learning-paths.md).
 

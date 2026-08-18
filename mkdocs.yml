@@ -47,6 +47,13 @@ nav:
       - Exact variance decomposition: concepts/variance-decomposition.md
       - CtrlVector terminology: concepts/terminology.md
       - Core business objects: concepts/core-business-objects.md
+  - Implementation guide:
+      - Implementation guide: implementation/index.md
+      - Plan the implementation: implementation/plan.md
+      - Build the foundation: implementation/foundation.md
+      - Configure the semantic model: implementation/semantic-model.md
+      - Load and govern data: implementation/data-workflow.md
+      - Create and validate the Bridge: implementation/bridge-validation.md
   - Operating CtrlVector:
       - Operating CtrlVector: operating/index.md
       - End-to-end workflow: operating/end-to-end-workflow.md
