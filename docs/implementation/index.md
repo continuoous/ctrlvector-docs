@@ -21,7 +21,7 @@ This is an implementation journey, not a field-by-field reference. Each chapter 
 | 1. [Plan](plan.md) | Agreed business question, grains, governance, and controls | Signed design workbook and acceptance plan |
 | 2. [Build the foundation](foundation.md) | Dimensions and time objects exist | Display transactions confirm saved objects and members |
 | 3. [Configure the semantic model](semantic-model.md) | Policies, Factors, derivations, Node, and Analysis align | Effective Analysis scope contains the intended analytical and supporting Factors |
-| 4. [Load and govern data](data-workflow.md) | Reference and current inputs are finalized and verified | Contribution, approval, finalization, and totals controls reconcile |
+| 4. [Load and govern data](data-workflow.md) | Uploaded or [reference-populated](reference-population.md) inputs are finalized and verified | Contribution, approval, finalization, lineage, and totals controls reconcile |
 | 5. [Create and validate the Bridge](bridge-validation.md) | The comparison is explainable and auditable | Independent totals, Shapley results, filtered detail, and lineage reconcile |
 
 ## Verified applicability
@@ -34,6 +34,8 @@ The workshop behind this Draft used:
 - directly entered and derived Factors at different native grains;
 - two period-specific submission workspaces;
 - a Quarter-over-Quarter Bridge reviewed in BRRES.
+
+A second workshop reused the same semantic model for a Forecast Version. It verified governed Copy and statistical reference strategies, Draft overrides, Contribution revisions, package reconciliation, approval, lineage-bearing finalization, and independent totals verification through `SUBTV`. The unchanged Bridge steps were not repeated.
 
 ## Important boundary
 

@@ -1,7 +1,7 @@
 # Load and govern data
 
 !!! warning "Page status: Draft"
-    The workflow has been exercised with period-specific long-format files. Confirm the current file contract before using it in another release.
+    The workflow has been exercised with period-specific long-format files and governed reference-population packages. Confirm the current file contract and Population Policy before using it in another release.
 
 ## Entry criteria
 
@@ -51,11 +51,21 @@ In SUBST:
 1. select the Version–Period workspace;
 2. materialize expected contributions from the configured Data Collation Groups;
 3. reconcile the expected count to the design workbook;
-4. upload and review the package;
-5. resolve validation findings;
-6. commit the accepted package.
+4. choose direct upload or governed reference population;
+5. review the package at each Factor's native grain;
+6. resolve validation or behavior findings;
+7. confirm or override Draft submissions;
+8. apply or commit the accepted package.
 
 A matching expected-contribution and accepted-row count is a strong control only when the design intentionally expects one row per contribution. Define the control for your own model rather than assuming `36` is universal.
+
+### Reference-populated inputs
+
+When the target Version meaning permits a package strategy, SUBST can create a governed zero-row reference package and calculate Draft values from finalized source Versions and Periods. Copy, Average, Maximum, Minimum, Median, uplift, and manual routes have different source requirements.
+
+Review source context, calculation, native-grain Dimension combinations, and Draft submission before Apply. A statistical result may still violate a compositional or other cross-coordinate behavior constraint.
+
+Use [Populate inputs from reference data](reference-population.md) for the complete strategy, correction, lineage, and control procedure.
 
 ## 5. Approve, finalize, and verify
 
@@ -75,6 +85,8 @@ Repeat the complete sequence independently for the reference and current workspa
 
 - [ ] Expected contributions reconcile by Factor and native coordinate
 - [ ] Accepted package rows reconcile to the approved control
+- [ ] Reference calculations, Draft overrides, and source lineage reconcile where used
+- [ ] One authoritative submitted package supplies the intended Contribution coverage
 - [ ] No unresolved exceptions remain
 - [ ] All contributions are approved
 - [ ] Finalization reports the expected record population

@@ -87,7 +87,7 @@ SUBWK → optional SUBSW → SUBST → SUBAP → SUBFN → SUBTV
 |---|---|
 | `SUBWK` | A Submission Workspace for an Analysis, Version, and Period |
 | `SUBSW` | An optional partition of the Workspace |
-| `SUBST` | A submitted Contribution Package |
+| `SUBST` | Submitted Contribution evidence from direct upload or governed reference population |
 | `SUBAP` | An approved contribution |
 | `SUBFN` | A finalized Input Database |
 | `SUBTV` | Recorded totals verification |
@@ -108,7 +108,7 @@ The catalog also contains `RUNCR` and `RUNSB`, but their task pages are currentl
 4. Create and verify the Analysis Definition.
 5. Create the Submission Workspace for the required Analysis, Version, and Period.
 6. Create Sub-Workspaces when contributions need separate ownership or scope.
-7. Upload and review Contribution Packages.
+7. Upload and review Contribution Packages. For reference-populated inputs, calculate and review each Factor strategy before Apply.
 8. Approve eligible contributions.
 9. Finalize the Input Database.
 10. Verify finalized totals.
@@ -174,6 +174,7 @@ The Bridge is available for review with a traceable path back to governed config
 
 - [Transaction-code reference](../reference/transaction-codes.md)
 - [Prepare and submit data](prepare-and-submit-data.md)
+- [Populate inputs from reference data](../implementation/reference-population.md)
 - [Finalize databases](finalize-databases.md)
 - [Create bridges](create-bridges.md)
 - [Review results](review-results.md)

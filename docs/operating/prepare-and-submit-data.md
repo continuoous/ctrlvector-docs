@@ -33,7 +33,7 @@ Before starting, verify:
 |---|---|---|
 | `SUBWK` | Create Submission Workspace | Governed Workspace for an Analysis, Version, and Period |
 | `SUBSW` | Create Submission Sub-Workspace | Optional partition within the Workspace |
-| `SUBST` | Upload Contribution Package | Submitted contribution in the selected scope |
+| `SUBST` | Populate Workspace Inputs | Submitted contribution evidence from uploaded or reference-populated values |
 | `SUBAP` | Approve Contribution | Approved contribution eligible for finalization |
 
 ## Create the Submission Workspace
@@ -58,18 +58,40 @@ Use `SUBSW` when the Workspace needs clearer contribution partitions, such as se
 
 A Sub-Workspace is recommended for clearer contribution scope but is not required for every upload.
 
-## Upload a Contribution Package
+## Populate Workspace inputs
 
 1. Open `SUBST`.
-2. Select the intended Workspace and, where used, Sub-Workspace.
-3. Select the contribution scope.
-4. Upload the Contribution Package.
-5. Review the resulting contribution and any validation feedback.
-6. Correct and resubmit data that is not ready for approval.
+2. Select the intended Version and Period Workspace.
+3. Confirm expected Contributions are materialized.
+4. Choose the direct upload or reference-population route in Workspace Upload Review.
+5. Review native-grain rows and validation feedback.
+6. Confirm or override the proposed submission values.
+7. Apply or commit the package.
+
+Sub-Workspace, Contribution, and Dimension controls inside the review narrow what is displayed. Governed matching—not the review filter—determines which Contributions receive package evidence.
+
+### Use reference data
+
+If the Factor's Population Policy permits package strategies, select **Start reference population** and process one Factor at a time. Verify the Reference Version, Reference Period rule, source values, calculation, and editable Draft submission before Apply.
+
+When all calculated defaults are accepted unchanged, select **Use calculated defaults as submitted**. When a value must differ, edit the Draft explicitly so the submitted value and calculated default remain separately auditable.
+
+See [Populate inputs from reference data](../implementation/reference-population.md) for strategy semantics and behavior checks.
 
 ### Expected result
 
 The selected Workspace contains a submitted contribution that can be reviewed in `SUBAP`.
+
+## Inspect and correct before approval
+
+Use **View submitted values** to reopen Covered evidence as a read-only Submitted worksheet.
+
+- Use **Revise selected Contribution** for one unapproved owner's Factor scope.
+- Use **Withdraw** when an entire package is invalid.
+- Use **Resubmit** only when the frozen values remain valid.
+- Use **Start replacement package** when corrected values or sources are required.
+
+When names repeat, identify packages by row count, creation time, and short administrative reference. Wait for package-refresh progress to finish before performing another action.
 
 ## Approve contributions
 
@@ -113,6 +135,9 @@ The Workspace contains clearly scoped, approved contributions ready for `SUBFN`.
 | A Sub-Workspace cannot be created | No parent Workspace exists. | Create and save the Workspace with `SUBWK`. |
 | An upload appears under the wrong scope | The wrong Workspace or Sub-Workspace was selected. | Recheck the selected submission context before resubmitting. |
 | A contribution cannot be approved | It is not submitted or still requires correction. | Return to `SUBST`, resolve the issue, and resubmit. |
+| Apply is disabled although the preview is valid | No Draft value changed and unchanged defaults have not been acknowledged. | Change the intended Draft or select **Use calculated defaults as submitted**. |
+| A statistical Mix preview cannot be applied | The generated Draft violates its compositional total. | Correct the Draft groups before Apply. |
+| A package cannot be withdrawn | A linked Contribution is already approved. | Correct before approval; after approval, follow the governed reopening process for the release. |
 | Finalization is not ready | Required contributions are not approved. | Complete the `SUBAP` review. |
 
 ## Practice
@@ -135,5 +160,6 @@ Design a submission structure for three regional contributors. Decide whether on
 ## Related material
 
 - [End-to-end workflow](end-to-end-workflow.md)
+- [Populate inputs from reference data](../implementation/reference-population.md)
 - [Finalize databases](finalize-databases.md)
 - [Transaction-code reference](../reference/transaction-codes.md)
