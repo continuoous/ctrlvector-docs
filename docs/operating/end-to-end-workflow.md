@@ -80,15 +80,15 @@ Verify the saved definition with `ANA03`.
 Follow the submission chain:
 
 ```text
-SUBWK → optional SUBSW → SUBST → SUBAP → SUBFN → SUBTV
+SWS01 → SSW01 → SST01 or SST09 → SUBAP → SUBFN → SUBTV
 ```
 
 | Stage | Result |
 |---|---|
-| `SUBWK` | A Submission Workspace for an Analysis, Version, and Period |
-| `SUBSW` | An optional partition of the Workspace |
-| `SUBST` | Submitted Contribution evidence from direct upload or governed reference population |
-| `SUBAP` | An approved contribution |
+| `SWS01` | A Version–Period Submission Workspace |
+| `SSW01` | An Analysis Sub-Workspace |
+| `SST01` or `SST09` | Submitted Contribution evidence from governed reference population or direct upload |
+| `SUBAP` | An approved Workspace candidate |
 | `SUBFN` | A finalized Input Database |
 | `SUBTV` | Recorded totals verification |
 

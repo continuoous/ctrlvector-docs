@@ -31,15 +31,18 @@ Before starting, verify:
 
 | TCode | Business intention | Output |
 |---|---|---|
-| `SUBWK` | Create Submission Workspace | Governed Workspace for an Analysis, Version, and Period |
-| `SUBSW` | Create Submission Sub-Workspace | Optional partition within the Workspace |
-| `SUBST` | Populate Workspace Inputs | Submitted contribution evidence from uploaded or reference-populated values |
-| `SUBAP` | Approve Contribution | Approved contribution eligible for finalization |
+| `SWS01` | Create Submission Workspace | Governed Version–Period Workspace |
+| `SSW01` | Attach an Analysis Sub-Workspace | Analysis calculation and presentation scope within the Workspace |
+| `SST01` | Create reference-based initial submissions | Submitted Contribution evidence |
+| `SST02` | Revise selected Contributions | Updated, traceable submission evidence |
+| `SST03` | Display submissions | Read-only submitted values and lineage |
+| `SST09` | Upload initial values | Bulk-uploaded Contribution evidence |
+| `SUBAP` | Approve Workspace | One authorized Workspace decision eligible for finalization |
 
 ## Create the Submission Workspace
 
-1. Open `SUBWK`.
-2. Select the intended Analysis, Version, and Period.
+1. Open `SWS01`.
+2. Select the intended Version and Period.
 3. Create the Workspace.
 4. Confirm that the saved Workspace represents the intended submission context.
 
@@ -49,21 +52,21 @@ The Workspace becomes available to downstream submission transactions.
 
 ## Decide whether to use Sub-Workspaces
 
-Use `SUBSW` when the Workspace needs clearer contribution partitions, such as separate business units, teams, or submission responsibilities.
+Use `SSW01` to attach each Analysis required by the Workspace.
 
-1. Open `SUBSW`.
+1. Open `SSW01`.
 2. Select the existing Workspace.
-3. Create the required Sub-Workspace.
-4. Repeat for each governed partition.
+3. Create the required Analysis Sub-Workspace.
+4. Repeat for each governed Analysis.
 
-A Sub-Workspace is recommended for clearer contribution scope but is not required for every upload.
+A Sub-Workspace carries an Analysis context. Governed Contributions may support more than one Analysis.
 
 ## Populate Workspace inputs
 
-1. Open `SUBST`.
+1. Open `SST01` for reference-based values or `SST09` for direct CSV upload.
 2. Select the intended Version and Period Workspace.
 3. Confirm expected Contributions are materialized.
-4. Choose the direct upload or reference-population route in Workspace Upload Review.
+4. Choose the permitted population strategy or upload route.
 5. Review native-grain rows and validation feedback.
 6. Confirm or override the proposed submission values.
 7. Apply or commit the package.
@@ -72,7 +75,7 @@ Sub-Workspace, Contribution, and Dimension controls inside the review narrow wha
 
 ### Use reference data
 
-If the Factor's Population Policy permits package strategies, select **Start reference population** and process one Factor at a time. Verify the Reference Version, Reference Period rule, source values, calculation, and editable Draft submission before Apply.
+If the Factor's Population Policy permits package strategies, process one Factor at a time in `SST01`. Verify the Reference Version, Reference Period rule, source values, calculation, and editable Draft submission before Apply.
 
 When all calculated defaults are accepted unchanged, select **Use calculated defaults as submitted**. When a value must differ, edit the Draft explicitly so the submitted value and calculated default remain separately auditable.
 
@@ -84,77 +87,77 @@ The selected Workspace contains a submitted contribution that can be reviewed in
 
 ## Inspect and correct before approval
 
-Use **View submitted values** to reopen Covered evidence as a read-only Submitted worksheet.
+Use `SST03` to reopen Covered evidence as a read-only Submitted worksheet.
 
-- Use **Revise selected Contribution** for one unapproved owner's Factor scope.
+- Use `SST02` for one contributor's Factor scope.
 - Use **Withdraw** when an entire package is invalid.
 - Use **Resubmit** only when the frozen values remain valid.
 - Use **Start replacement package** when corrected values or sources are required.
 
 When names repeat, identify packages by row count, creation time, and short administrative reference. Wait for package-refresh progress to finish before performing another action.
 
-## Approve contributions
+## Approve the Workspace
 
 1. Open `SUBAP`.
-2. Select the Workspace containing submitted contributions.
-3. Review each contribution's status and scope.
-4. Approve contributions that satisfy the business and validation requirements.
-5. Reject or return contributions that require correction.
-6. Confirm that the intended contributions are approved before continuing.
+2. Select the Workspace containing complete submitted Contribution coverage.
+3. Reconcile baseline and submitted Node results.
+4. Review policy issues with their Factor, Contribution member scope, and contributor evidence.
+5. Resolve each issue or route selected Contributions to `SST02`.
+6. Recalculate after revision, then approve the complete Workspace once.
 
-Approval is a separate control. Uploading a package does not make it eligible for finalization automatically.
+Approval is a separate control. Complete data coverage makes a Workspace calculable, not automatically acceptable. See [Govern submissions and approve the Workspace](../implementation/workspace-approval.md).
 
 ## Worked example
 
-A monthly Actual submission contains contributions from Poland and Germany.
+A monthly Actual Workspace contains contributions owned for Poland and Germany within one revenue Analysis.
 
-1. Create one Workspace for the revenue Analysis, Actual Version, and selected Period.
-2. Create `Poland` and `Germany` Sub-Workspaces.
-3. Upload each country's Contribution Package to the matching Sub-Workspace.
-4. Review both submissions.
-5. Approve each eligible contribution.
+1. Create one Workspace for the Actual Version and selected Period.
+2. Attach the revenue Analysis as an Analysis Sub-Workspace.
+3. Materialize the Poland and Germany Contribution scopes from their governed ownership groups.
+4. Submit each country's values and verify their evidence.
+5. Review the combined revenue result and approve the Workspace once.
 
 ### Expected result
 
-The Workspace contains clearly scoped, approved contributions ready for `SUBFN`.
+The Workspace contains complete, clearly scoped Contributions and one current approval decision ready for `SUBFN`.
 
 ## Verification checklist
 
-- The Workspace uses the correct Analysis, Version, and Period.
-- Every Sub-Workspace has a clear business purpose.
+- The Workspace uses the correct Version and Period.
+- Every Analysis Sub-Workspace has a clear business purpose.
 - Each package is attached to the intended scope.
 - Validation feedback has been resolved.
-- Only eligible contributions are approved.
-- All contributions intended for finalization are present and approved.
+- Every policy issue is resolved or explicitly retained as an authorized open item.
+- All Contributions intended for finalization are present and the current Workspace candidate is approved.
 
 ## Common errors
 
 | Symptom | Likely cause | Resolution |
 |---|---|---|
-| `SUBWK` needs setup | Analysis, Version, or Period is missing. | Verify `ANA03`, `VER03`, and `PER03`. |
-| A Sub-Workspace cannot be created | No parent Workspace exists. | Create and save the Workspace with `SUBWK`. |
+| `SWS01` needs setup | Version or Period is missing. | Verify `VER03` and `PER03`. |
+| A Sub-Workspace cannot be created | No parent Workspace or Analysis exists. | Create the Workspace with `SWS01` and verify the Analysis in `ANA03`. |
 | An upload appears under the wrong scope | The wrong Workspace or Sub-Workspace was selected. | Recheck the selected submission context before resubmitting. |
-| A contribution cannot be approved | It is not submitted or still requires correction. | Return to `SUBST`, resolve the issue, and resubmit. |
+| The Workspace cannot be approved | Coverage is incomplete, a revision is pending, or the candidate is stale. | Return to the applicable SST transaction, then recalculate in `SUBAP`. |
 | Apply is disabled although the preview is valid | No Draft value changed and unchanged defaults have not been acknowledged. | Change the intended Draft or select **Use calculated defaults as submitted**. |
 | A statistical Mix preview cannot be applied | The generated Draft violates its compositional total. | Correct the Draft groups before Apply. |
 | A package cannot be withdrawn | A linked Contribution is already approved. | Correct before approval; after approval, follow the governed reopening process for the release. |
-| Finalization is not ready | Required contributions are not approved. | Complete the `SUBAP` review. |
+| Finalization is not ready | The current Workspace candidate is not approved. | Complete the `SUBAP` review and Workspace decision. |
 
 ## Practice
 
-Design a submission structure for three regional contributors. Decide whether one Workspace with three Sub-Workspaces provides the clearest scope, and identify the Analysis, Version, and Period each contribution should share.
+Design a submission structure for three regional contributors and two Analyses. Identify the shared Version–Period Workspace, the two Analysis Sub-Workspaces, and which Contributions affect one or both Analyses.
 
 ## Knowledge check
 
-1. Which three configured objects are required for `SUBWK`?
-2. Is `SUBSW` always mandatory?
-3. Does `SUBST` approve a contribution?
+1. Which two configured objects define a Workspace in `SWS01`?
+2. What business object does `SSW01` attach?
+3. Do SST transactions approve the Workspace?
 4. Which transaction must be complete before finalization?
 
 ??? example "Answers"
-    1. An Analysis, Version, and Period.
-    2. No. It is optional but recommended when partitioning improves scope.
-    3. No. Approval occurs in `SUBAP`.
+    1. A Version and Period.
+    2. An Analysis as a Sub-Workspace.
+    3. No. The Workspace decision occurs in `SUBAP`.
     4. `SUBAP`.
 
 ## Related material

@@ -66,11 +66,14 @@ An Analysis Definition requires registered Dimensions, Factors, and Nodes. Decis
 
 | TCode | Intention | Prerequisite |
 |---|---|---|
-| `SUBWK` | Create Submission Workspace | Analysis, Version, and Period |
-| `SUBSW` | Create Submission Sub-Workspace | Submission Workspace |
-| `SUBST` | Upload Contribution Package | Submission Workspace; a Sub-Workspace is recommended where the contribution scope is partitioned |
-| `SUBAP` | Approve Contribution | Submitted Contribution Package |
-| `SUBFN` | Finalize Input Database | Approved contributions |
+| `SWS01/02/03/09` | Create, change, display, or import Submission Workspaces | Version and Period; comparison references are maintained separately |
+| `SSW01/02/03/09` | Create, change, display, or import Analysis Sub-Workspaces | Submission Workspace and Analysis |
+| `SST01` | Create initial reference-based submissions | Collecting Workspace with pending governed Contributions |
+| `SST02` | Revise selected Contributions | Covered submission eligible for revision |
+| `SST03` | Display submitted values and lineage | Existing submission evidence |
+| `SST09` | Upload initial values in bulk | Collecting Workspace with pending governed Contributions |
+| `SUBAP` | Approve the Workspace | Complete submitted Contribution coverage |
+| `SUBFN` | Finalize approved Analysis artifacts | Approved Workspace |
 | `SUBTV` | Verify Totals | Finalized Input Database |
 
 Follow these transactions in order. A readiness indicator reflects saved business artifacts and prerequisites, not whether someone has merely opened a transaction.

@@ -54,6 +54,7 @@ nav:
       - Configure the semantic model: implementation/semantic-model.md
       - Load and govern data: implementation/data-workflow.md
       - Populate inputs from reference data: implementation/reference-population.md
+      - Govern submissions and approve the Workspace: implementation/workspace-approval.md
       - Create and validate the Bridge: implementation/bridge-validation.md
   - Operating CtrlVector:
       - Operating CtrlVector: operating/index.md

@@ -69,21 +69,21 @@ Maximum Period count is a ceiling. If only two eligible prior Periods exist when
 
 ### 1. Create and inspect the target Workspace
 
-1. Create the target Analysis, Version, and Period Workspace in `SUBWK`.
-2. Open the automatically created Analysis Sub-Workspace or materialize its expected Contributions.
+1. Create the target Version and Period Workspace in `SWS01`.
+2. Attach the required Analysis in `SSW01`, then materialize its expected Contributions.
 3. Confirm the expected Contribution inventory before creating a package.
 
 The frozen population plan follows the selected Analysis and its required Factor dependencies. It should not contain unrelated tenant Factors.
 
-### 2. Enter SUBST through the Workspace
+### 2. Enter SST01 through the Workspace
 
-Select the Version and Period Workspace in `SUBST`. This is the single entry gate for both CSV and reference-based population.
+Select the Version and Period Workspace in `SST01`. This transaction creates initial reference-based submissions; use `SST09` for direct CSV upload.
 
 Sub-Workspace, Contribution, and Dimension controls inside Workspace Upload Review are review filters. They do not narrow the eventual Apply scope for the selected Factor. Governed row matching assigns submitted rows to the appropriate materialized Contributions and Sub-Workspaces.
 
-### 3. Start the reference package
+### 3. Choose a Factor population strategy
 
-Select **Start reference population**. CtrlVector creates a governed zero-row package; a dummy CSV is not required.
+Select a pending Factor and its permitted population strategy. CtrlVector prepares the governed reference package as part of the initial-submission flow; a dummy CSV is not required.
 
 Package creation and Factor population are separate checkpoints. Wait for package confirmation before configuring the first Factor strategy.
 
@@ -155,7 +155,7 @@ Use the smallest safe correction boundary.
 
 ### Revise one Contribution
 
-Use **Revise selected Contribution** when one owner's Factor scope is wrong:
+Open `SST02` when one owner's Factor scope is wrong:
 
 1. select exactly one Covered, unapproved Contribution;
 2. compare Current submission with its Dimension context;
@@ -181,13 +181,15 @@ When package names repeat, identify the intended package using its row count, cr
 Reference-generated facts follow the same downstream controls as uploaded facts:
 
 ```text
-SUBST → SUBAP → SUBFN → SUBTV
+SST01 or SST09 → SUBAP → SUBFN → SUBTV
 ```
 
-1. In `SUBAP`, confirm the authoritative package covers every expected Contribution, then approve eligible Contributions.
+1. In `SUBAP`, reconcile complete Contribution coverage, review the recombined Workspace and its policy issues, then make one Workspace decision.
 2. In `SUBFN`, finalize the ready Sub-Workspace and confirm the expected record population.
 3. In `SUBTV`, calculate Node totals and enter an independently derived Expected total.
 4. Record the verification only when Expected and Actual reconcile within the approved tolerance.
+
+See [Govern submissions and approve the Workspace](workspace-approval.md) for baseline-impact evidence, targeted `SST02` revision, and conditional approval.
 
 ## Reconciled example
 

@@ -28,7 +28,7 @@ The long-format package uses Version, Period, Factor, Value, and the applicable 
 
 ## 2. Run pre-upload controls
 
-Before opening SUBST, verify:
+Before opening `SST01` or `SST09`, verify:
 
 - one Version and Period per package;
 - expected counts by Factor;
@@ -40,13 +40,13 @@ Before opening SUBST, verify:
 
 ## 3. Create period-specific workspaces
 
-Use SUBWK to create the reference workspace first and the current workspace second. Select the approved Analysis, Version, and Period. Configure the comparison reference on the current workspace where required.
+Use `SWS01` to create the reference Workspace first and the current Workspace second. Select the Version and Period, then use `SWS02` to maintain an optional comparison or submission baseline while the Workspace is still collecting.
 
-Use SUBSW only when contribution partitioning is needed.
+Use `SSW01` to attach each required Analysis as a Sub-Workspace. A Sub-Workspace is an Analysis context, not merely a contribution partition.
 
 ## 4. Materialize and submit contributions
 
-In SUBST:
+Use `SST01` for governed reference-based initial submissions or `SST09` for direct bulk upload:
 
 1. select the Version–Period workspace;
 2. materialize expected contributions from the configured Data Collation Groups;
@@ -61,11 +61,13 @@ A matching expected-contribution and accepted-row count is a strong control only
 
 ### Reference-populated inputs
 
-When the target Version meaning permits a package strategy, SUBST can create a governed zero-row reference package and calculate Draft values from finalized source Versions and Periods. Copy, Average, Maximum, Minimum, Median, uplift, and manual routes have different source requirements.
+When the target Version meaning permits a package strategy, `SST01` can create governed reference-based Draft values from finalized source Versions and Periods. Copy, Average, Maximum, Minimum, Median, and uplift routes have different source requirements. Use `SST09` for direct CSV upload.
 
 Review source context, calculation, native-grain Dimension combinations, and Draft submission before Apply. A statistical result may still violate a compositional or other cross-coordinate behavior constraint.
 
 Use [Populate inputs from reference data](reference-population.md) for the complete strategy, correction, lineage, and control procedure.
+
+Use `SST02` for a targeted revision and `SST03` to inspect the currently submitted values and lineage without editing them.
 
 ## 5. Approve, finalize, and verify
 
@@ -75,9 +77,11 @@ Follow the governed sequence:
 SUBAP → SUBFN → SUBTV
 ```
 
-- SUBAP confirms contribution decisions.
-- SUBFN creates the finalized input database and materializes eligible derivations.
+- SUBAP evaluates policy issues and makes one decision over the complete recombined Workspace.
+- SUBFN materializes the approved Analysis artifacts; it is not a second business approval gate.
 - SUBTV records the totals-verification state.
+
+See [Govern submissions and approve the Workspace](workspace-approval.md) for contributor preflight, structured evidence, targeted revision, conditional approval, and multi-Analysis guidance.
 
 Repeat the complete sequence independently for the reference and current workspaces.
 

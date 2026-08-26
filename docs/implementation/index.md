@@ -21,8 +21,9 @@ This is an implementation journey, not a field-by-field reference. Each chapter 
 | 1. [Plan](plan.md) | Agreed business question, grains, governance, and controls | Signed design workbook and acceptance plan |
 | 2. [Build the foundation](foundation.md) | Dimensions and time objects exist | Display transactions confirm saved objects and members |
 | 3. [Configure the semantic model](semantic-model.md) | Policies, Factors, derivations, Node, and Analysis align | Effective Analysis scope contains the intended analytical and supporting Factors |
-| 4. [Load and govern data](data-workflow.md) | Uploaded or [reference-populated](reference-population.md) inputs are finalized and verified | Contribution, approval, finalization, lineage, and totals controls reconcile |
-| 5. [Create and validate the Bridge](bridge-validation.md) | The comparison is explainable and auditable | Independent totals, Shapley results, filtered detail, and lineage reconcile |
+| 4. [Load and govern data](data-workflow.md) | Uploaded or [reference-populated](reference-population.md) inputs are submitted at native grain | Contribution coverage, Draft values, and lineage reconcile |
+| 5. [Govern submissions and approve the Workspace](workspace-approval.md) | Contributor evidence becomes one controlled Workspace decision | Baseline/result reconciliation, issue resolution, approval, finalization, and totals controls reconcile |
+| 6. [Create and validate the Bridge](bridge-validation.md) | The comparison is explainable and auditable | Independent totals, Shapley results, filtered detail, and lineage reconcile |
 
 ## Verified applicability
 
@@ -36,6 +37,10 @@ The workshop behind this Draft used:
 - a Quarter-over-Quarter Bridge reviewed in BRRES.
 
 A second workshop reused the same semantic model for a Forecast Version. It verified governed Copy and statistical reference strategies, Draft overrides, Contribution revisions, package reconciliation, approval, lineage-bearing finalization, and independent totals verification through `SUBTV`. The unchanged Bridge steps were not repeated.
+
+A third workshop tested the submission-to-approval control boundary with a Scenario Version. It verified submission-baseline impact, structured contributor evidence, targeted revision, candidate recalculation, policy-issue resolution, and one holistic Workspace approval. Finalization and totals verification were outside that workshop's scope.
+
+Multi-Analysis approval and finalization are documented as provisional. Their architecture and automated checks are complete, but the two-Analysis live acceptance journey is still in progress.
 
 ## Important boundary
 

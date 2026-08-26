@@ -5,7 +5,7 @@
 
 ## Purpose
 
-Finalization turns approved contributions into an Input Database that can support downstream comparison. Totals verification records the control check performed against that finalized result.
+Finalization turns an approved Workspace decision into Analysis Input Databases that can support downstream comparison. Totals verification records the control check performed against each finalized result.
 
 ## Learning objectives
 
@@ -22,7 +22,7 @@ Before opening `SUBFN`, confirm:
 
 - the Submission Workspace is the intended Analysis, Version, and Period context;
 - all contributions intended for inclusion have been submitted;
-- the required contributions are approved in `SUBAP`;
+- the current Workspace candidate is approved in `SUBAP`;
 - any rejected or missing contribution has an understood treatment.
 
 ## Finalize with SUBFN
@@ -77,8 +77,8 @@ The finalized Input Database has a recorded totals-verification result and can s
 
 | Symptom | Likely cause | Resolution |
 |---|---|---|
-| Finalization is unavailable | One or more required contributions are not approved. | Complete the review in `SUBAP`. |
-| An expected contribution is absent | It was uploaded to another scope or was not submitted. | Return to `SUBST` and inspect the Workspace and Sub-Workspace selection. |
+| Finalization is unavailable | The Workspace is incomplete, stale, or not approved. | Complete submission coverage, recalculate if needed, and decide the Workspace in `SUBAP`. |
+| An expected contribution is absent | It was uploaded to another scope or was not submitted. | Return to `SST01`, `SST02`, or `SST09` and inspect the Workspace, Factor, and Contribution scope. |
 | Totals verification is unavailable | No finalized Input Database exists. | Complete `SUBFN`. |
 | Control totals do not agree | The contribution scope, Version, Period, or source data differs from expectation. | Reconcile the context and contributions before recording verification. |
 
