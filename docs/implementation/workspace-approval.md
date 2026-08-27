@@ -1,7 +1,7 @@
 # Govern submissions and approve the Workspace
 
 !!! warning "Page status: Draft"
-    The single-Analysis approval journey has been exercised in a development workshop. Multi-Analysis approval and finalization are implemented and automated-test reviewed, but still require live Workshop 4 validation.
+    Single- and multi-Analysis approval journeys have been exercised in development workshops. Product-owner and implementation-lead review is still required before this chapter is promoted from Draft.
 
 ## Purpose
 
@@ -21,6 +21,7 @@ After completing this chapter, you should be able to:
 - distinguish submission completeness from business approval;
 - use a submission baseline without confusing it with a population reference;
 - interpret policy exceptions at Workspace, Analysis, Node, or Factor-event scope;
+- review one shared business event across several Analyses without combining incompatible measures;
 - route a precise Contribution revision without rejecting unrelated work;
 - record explanations that can support the later story behind the numbers;
 - distinguish Workspace approval from SUBFN materialization.
@@ -147,12 +148,50 @@ Example:
 
 The condition must contain a measurable metric, comparison operator, target, scope, and unit. Never apply one numeric target to incompatible measures.
 
-## 7. Approve once, then materialize
+## 7. Review several Analyses as one Workspace decision
+
+One governed Contribution can affect Nodes in several Analysis Sub-Workspaces. For example, a utilization assumption may affect both a financial Freight Spend Analysis and an operational Tonnage Analysis.
+
+SUBAP should show that shared submission once as one business event, with every affected Analysis clearly identified. Each consequence must retain its own:
+
+- Analysis and Node;
+- observed movement;
+- format and unit;
+- governed boundary;
+- condition or required response.
+
+Do not add or compare incompatible measures. A financial movement in K$ and an operational movement in Tonnes belong in the same causal context but remain separate observations and conditions.
+
+Separate submission scopes must also remain separate decisions. Two Rate Per KG submissions for different Country and Mode scopes may require different explanations, owners, or approver outcomes even when they affect the same Node.
+
+## 8. Approve once, then materialize
 
 After every issue is resolved and no revision is pending, approve the Workspace once. `SUBFN` then materializes the approved Analysis artifacts.
 
-!!! info "Provisional multi-Analysis behavior"
-    One Contribution may affect Nodes in several Analysis Sub-Workspaces. The approval candidate keeps those Analysis consequences together under one Workspace decision. Shared evidence is resolved once, while conditions retain separate metrics and units for each governed scope. Live validation of two finalized Analysis artifacts, partial failure, retry, and approved-candidate linkage is scheduled for Workshop 4.
+For a Workspace containing several Analyses:
+
+- the same Workspace approval authorizes every ready Analysis Sub-Workspace;
+- each Analysis receives its own immutable finalized artifact;
+- the parent Workspace becomes finalized only after the required artifacts exist;
+- a technical retry must reuse or skip completed artifacts rather than duplicate them;
+- finalized artifacts do not reopen the business approval decision.
+
+`SUBFN` is therefore a technical materialization and recovery boundary. It is not the place to reconsider an approved business outcome.
+
+## 9. Preserve the decision story
+
+Finalization should preserve the complete approved decision context, not only the submitted totals. Each Analysis artifact must remain traceable to the same Workspace-level evidence:
+
+- the approved candidate and decision;
+- applicable policy checks;
+- headwind, tailwind, or neutral Node movements;
+- Factor- and Node-level resolutions;
+- scoped contributor and approver explanations;
+- accepted residual items;
+- mitigations, risks, action owners, and due dates;
+- the Contribution scope associated with each action.
+
+This frozen context supports a later story behind the numbers without reconstructing history from approval screens that may have changed. It also preserves the difference between the operational facts held by one Analysis artifact and the holistic Workspace decision that authorized all related artifacts.
 
 ## Verification
 
@@ -167,6 +206,10 @@ After every issue is resolved and no revision is pending, approve the Workspace 
 - [ ] Structured explanations include owner and follow-up where required
 - [ ] Workspace approval occurs once
 - [ ] SUBFN receives only an approved, current candidate
+- [ ] Incompatible Analysis units remain separate
+- [ ] Every ready Analysis produces its own immutable artifact
+- [ ] A technical retry does not duplicate finalized artifacts
+- [ ] Finalized artifacts retain explanations, decisions, owners, and due dates
 
 ## Common errors
 
@@ -178,6 +221,8 @@ After every issue is resolved and no revision is pending, approve the Workspace 
 | Old evidence remains after revision | The approval candidate was not recalculated | Recalculate SUBAP from current submitted facts |
 | Approval is disabled | A revision, blocking review item, or stale candidate remains | Resolve the item or recalculate before deciding |
 | A total combines K$ and Tonnes | Unlike Node formats were aggregated | Govern and display them at separate Analysis or Node scopes |
+| One shared submission appears as unrelated issues | Cross-Analysis consequences were detached from their common evidence | Present one business event with separate scoped observations |
+| A finalization retry creates another artifact | The operation was not treated as idempotent technical recovery | Stop downstream use and reconcile the approved candidate and existing artifacts |
 
 ## Practice
 
@@ -217,4 +262,4 @@ Expected design: two business events remain distinguishable; the shared volume e
 
 ## Product applicability
 
-The single-Analysis procedure reflects the development application reviewed through 26 August 2026. Multi-Analysis presentation, shared-event resolution, and unit-safe conditions have automated verification. Multi-artifact SUBFN finalization, partial-failure handling, technical retry, and approved-candidate linkage remain provisional until Workshop 4 records live evidence.
+The procedures reflect development-workshop review through 27 August 2026. The multi-Analysis workshop verified shared and Analysis-local events, unit-safe conditions, targeted revision, candidate recalculation, one Workspace approval, separate immutable Analysis artifacts, and idempotent finalization retry. It stopped before multi-Analysis totals verification in `SUBTV`.

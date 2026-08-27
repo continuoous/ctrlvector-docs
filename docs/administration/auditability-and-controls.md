@@ -13,4 +13,5 @@ Connect exact reconciliation to the configuration, source data, approvals, and l
 - revision and change metadata;
 - finalization and immutability;
 - ownership, approval, and exception evidence;
+- immutable linkage from each finalized Analysis artifact to the shared Workspace decision, scoped narratives, mitigations, owners, and due dates;
 - periodic control checks and audit scenarios.

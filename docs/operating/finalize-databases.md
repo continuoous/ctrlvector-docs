@@ -13,6 +13,7 @@ After reading this chapter, you should be able to:
 
 - identify when a Workspace is ready for finalization;
 - distinguish contribution approval from database finalization;
+- understand how one approved Workspace produces several Analysis artifacts;
 - distinguish finalization from totals verification;
 - verify that finalized data is ready for Bridge creation.
 
@@ -30,13 +31,22 @@ Before opening `SUBFN`, confirm:
 1. Open `SUBFN`.
 2. Select the intended Submission Workspace.
 3. Review the approved contribution coverage.
-4. Select the eligible contribution scope for finalization.
-5. Finalize the Input Database.
-6. Confirm that the finalized result is associated with the intended Workspace.
+4. Review every eligible Analysis Sub-Workspace.
+5. Finalize the approved Analysis artifacts together.
+6. Confirm that one immutable Input Database exists for each required Analysis.
+7. Confirm that every artifact traces to the same approved Workspace candidate.
 
 ### Expected result
 
-A finalized Input Database exists and becomes eligible for totals verification and downstream comparison.
+Every required Analysis has its own finalized Input Database and becomes eligible for totals verification and downstream comparison. The parent Workspace is finalized only after the required Analysis artifacts exist.
+
+### Technical retry
+
+If finalization is repeated after an interruption, completed Analysis artifacts should be reused or skipped. The retry must not create duplicates, reopen Contributions, or request another business approval.
+
+### Approval and narrative lineage
+
+Finalized artifacts retain the business-decision context authorized in `SUBAP`, including scoped explanations, policy outcomes, accepted residual items, mitigations, action owners, and due dates. This lineage supports later audit and story-behind-the-numbers review without changing the immutable submitted facts.
 
 ## Verify totals with SUBTV
 
@@ -69,6 +79,10 @@ The finalized Input Database has a recorded totals-verification result and can s
 - Every included contribution is approved.
 - Excluded or rejected contributions are understood.
 - The finalized Input Database exists.
+- One artifact exists for each required Analysis.
+- Every artifact belongs to the same approved Workspace decision.
+- A repeated finalization request creates no duplicate artifact.
+- Approval narratives and accountable actions remain traceable.
 - The total was compared at the intended business scope.
 - The verification result was recorded.
 - The Version and Period match the intended downstream comparison.
@@ -79,6 +93,8 @@ The finalized Input Database has a recorded totals-verification result and can s
 |---|---|---|
 | Finalization is unavailable | The Workspace is incomplete, stale, or not approved. | Complete submission coverage, recalculate if needed, and decide the Workspace in `SUBAP`. |
 | An expected contribution is absent | It was uploaded to another scope or was not submitted. | Return to `SST01`, `SST02`, or `SST09` and inspect the Workspace, Factor, and Contribution scope. |
+| Only some Analysis artifacts exist | A technical failure interrupted multi-Analysis materialization. | Review the diagnostic and use the governed retry; do not repeat the business approval. |
+| A retry appears to duplicate an artifact | Existing finalized state was not recognized. | Stop downstream use and reconcile artifact identity before continuing. |
 | Totals verification is unavailable | No finalized Input Database exists. | Complete `SUBFN`. |
 | Control totals do not agree | The contribution scope, Version, Period, or source data differs from expectation. | Reconcile the context and contributions before recording verification. |
 

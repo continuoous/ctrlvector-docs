@@ -40,7 +40,7 @@ A second workshop reused the same semantic model for a Forecast Version. It veri
 
 A third workshop tested the submission-to-approval control boundary with a Scenario Version. It verified submission-baseline impact, structured contributor evidence, targeted revision, candidate recalculation, policy-issue resolution, and one holistic Workspace approval. Finalization and totals verification were outside that workshop's scope.
 
-Multi-Analysis approval and finalization are documented as provisional. Their architecture and automated checks are complete, but the two-Analysis live acceptance journey is still in progress.
+A fourth workshop verified one Scenario Workspace containing two Analysis Sub-Workspaces. It exercised shared and Analysis-local submission evidence, separate financial and operational policy observations, targeted Contribution revision, candidate recalculation, one Workspace approval, separate immutable Analysis artifacts, and idempotent finalization retry. It intentionally stopped before `SUBTV`, so multi-Analysis totals verification remains outside that workshop's acceptance scope.
 
 ## Important boundary
 
