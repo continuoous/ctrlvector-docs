@@ -51,13 +51,17 @@ Finalized artifacts retain the business-decision context authorized in `SUBAP`, 
 ## Verify totals with SUBTV
 
 1. Open `SUBTV`.
-2. Select the finalized Input Database.
-3. Review the calculated totals in the intended business scope.
-4. Compare them with the expected control totals.
-5. Resolve differences before recording a successful verification.
-6. Record the totals-verification result.
+2. Select the finalized Workspace.
+3. Use **All Sub-Workspaces** when the Workspace contains several Analyses.
+4. Review every Node beneath its Analysis.
+5. Compare each calculated finalized total with its approved expected total.
+6. Resolve differences before recording a successful verification.
+7. Record the Analysis verification statements.
+8. Confirm that the parent Workspace reports totals verified only after every required Analysis passes.
 
 `SUBTV` depends on `SUBFN`; totals cannot be verified against a database that has not been finalized.
+
+Do not add Nodes with unlike formats. A financial statement and an operational statement may be reviewed together on one page while retaining separate units and verification outcomes.
 
 ## Worked example
 
@@ -84,6 +88,9 @@ The finalized Input Database has a recorded totals-verification result and can s
 - A repeated finalization request creates no duplicate artifact.
 - Approval narratives and accountable actions remain traceable.
 - The total was compared at the intended business scope.
+- Every governed Node was reviewed beneath the correct Analysis.
+- Unlike units were not aggregated.
+- The parent Workspace verification state agrees with the Analysis statements.
 - The verification result was recorded.
 - The Version and Period match the intended downstream comparison.
 

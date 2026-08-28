@@ -79,9 +79,11 @@ SUBAP → SUBFN → SUBTV
 
 - SUBAP evaluates policy issues and makes one decision over the complete recombined Workspace.
 - SUBFN materializes one immutable artifact for each approved Analysis Sub-Workspace; it is not a second business approval gate.
-- SUBTV records the totals-verification state.
+- SUBTV presents every governed Node beneath its Analysis, compares the finalized calculation with the approved expected total, and records the Analysis checks together.
 
 When one submitted Factor affects several Analyses, SUBAP keeps those consequences together as one business event while preserving each Node's own format and boundary. After approval, all ready Analysis artifacts are materialized from that same Workspace decision. A repeated technical finalization request must not duplicate completed artifacts or reopen approval.
+
+For a multi-Analysis Workspace, use **All Sub-Workspaces** in `SUBTV` to review the complete statement. Financial and operational Nodes remain grouped beneath their own Analyses and retain their own units; do not create a grand total across unlike measures. The Workspace reaches totals verified only after every required Analysis statement passes.
 
 Finalized artifacts should retain the approved explanations, policy resolutions, residual items, mitigations, action owners, and due dates needed for downstream narrative and audit use.
 

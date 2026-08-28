@@ -29,6 +29,8 @@ Start with independently calculated controls:
 
 BRRES must show the same total movement for the unfiltered Bridge. Do not proceed to interpretation when the basic movement does not reconcile.
 
+An unchanged Analysis may produce zero impact rows. When the persisted baseline and current totals are equal and reconciliation difference is zero, treat **No movement detected** as a successful comparison—not as missing decomposition data. Confirm both totals, the comparison lineage, and the zero change. Factor Analysis and per-unit review are not applicable to that Bridge.
+
 ## 3. Reconcile Factor attribution
 
 BRRES separates:
@@ -64,7 +66,19 @@ Confirm that:
 - source dimensions use business member values rather than technical identifiers;
 - baseline and current source facts can both be traced.
 
-## 6. Validate per-unit mode when required
+## 6. Validate the governed Factor story
+
+When Narrative Factor Detail contains governed approval evidence, confirm that it separates:
+
+- the impact of the active analytical slice;
+- the approved movement of the complete parent business event;
+- the full governed Contribution scope;
+- the matching explanation and approver conclusion;
+- mitigation, residual risk, action owner, and due date.
+
+A narrow member filter may match only part of a broader approved event. The screen should identify that relationship rather than rewriting the original explanation as if it belonged only to the selected member. Unrelated Workspace narratives must not appear in the Factor detail.
+
+## 7. Validate per-unit mode when required
 
 Enable **Show Per Unit Impact** only when the Node has an approved unit Factor.
 
@@ -86,6 +100,9 @@ Check that:
 - [ ] Narrative detail respects the selected business scope
 - [ ] Dimension concentration views are selectable
 - [ ] Raw formula inputs trace to finalized exact or governed sources
+- [ ] Governed narrative evidence matches the active Analysis, Node, Factor, and member scope
+- [ ] Active-slice impact remains distinct from the complete approved event
+- [ ] A completed no-movement Bridge shows equal totals and zero reconciliation difference, when applicable
 - [ ] Per-unit denominator and interaction state are correct, when applicable
 - [ ] Open defects and deferred capabilities are recorded separately
 

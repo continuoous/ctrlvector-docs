@@ -262,4 +262,4 @@ Expected design: two business events remain distinguishable; the shared volume e
 
 ## Product applicability
 
-The procedures reflect development-workshop review through 27 August 2026. The multi-Analysis workshop verified shared and Analysis-local events, unit-safe conditions, targeted revision, candidate recalculation, one Workspace approval, separate immutable Analysis artifacts, and idempotent finalization retry. It stopped before multi-Analysis totals verification in `SUBTV`.
+The procedures reflect development-workshop review through 28 August 2026. The multi-Analysis workshop verified shared and Analysis-local events, unit-safe conditions, targeted revision, candidate recalculation, one Workspace approval, separate immutable Analysis artifacts, idempotent finalization retry, Node-level totals verification, and downstream governed narrative traceability in BRRES.

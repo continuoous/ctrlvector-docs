@@ -16,6 +16,8 @@ After reading this chapter, you should be able to:
 - review the full Bridge before applying filters;
 - narrow the result scope deliberately;
 - distinguish initial result review from deeper interpretation.
+- recognize a valid completed Bridge with no movement;
+- trace a governed Factor explanation and action without mixing unrelated approval stories.
 
 ## Prerequisites
 
@@ -48,6 +50,23 @@ If the context does not match the business question, stop and select the correct
 
 Filters change the scope being reviewed; they do not create a new Bridge.
 
+### Completed comparison with no movement
+
+An unchanged Analysis may correctly have no impact rows. If BRRES shows **No movement detected**, verify that:
+
+- baseline and current finalized totals are identical;
+- change is zero;
+- reconciliation difference is zero;
+- the displayed Analysis and Version/Period lineage are correct.
+
+Factor Analysis and per-unit controls are not applicable in this state. Do not rerun decomposition merely because no Factor rows exist.
+
+### Governed story in Narrative Factor Detail
+
+For a changed Factor, Narrative Factor Detail may include the approved explanation and follow-up action. Read the active analytical slice separately from the complete parent approval event. A selected member can be one part of an explanation that governed several Contributions; the card should preserve that complete scope while identifying the active match.
+
+Confirm the reason, approver conclusion, mitigation, residual risk, owner, and due date. Only evidence matching the active Analysis, Node, Factor, and member filters should appear.
+
 ## Worked example
 
 For the January-to-February Actual revenue Bridge:
@@ -74,6 +93,8 @@ The reviewer can explain which persisted Bridge was inspected, which scope was a
 - Every applied filter is visible and intentional.
 - Node or Factor focus is recorded with the conclusion.
 - The result remains traceable to the persisted Bridge.
+- A no-movement result, when present, shows equal totals and zero reconciliation difference.
+- Governed narrative evidence matches the active Factor scope and preserves its parent event.
 
 ## Common errors
 
@@ -84,6 +105,8 @@ The reviewer can explain which persisted Bridge was inspected, which scope was a
 | Totals change after filtering | The active filter narrows the business scope. | Review the filter list and compare with the full Bridge. |
 | A Factor cannot be selected | Factor analysis has not been activated. | Activate Factor analysis for the loaded Bridge. |
 | A conclusion cannot be reproduced | The Bridge, filter, Node, or Factor scope was not recorded. | Capture the complete review context. |
+| A completed unchanged Bridge appears empty | Zero impact rows were mistaken for missing decomposition data. | Confirm the explicit no-movement state, equal totals, comparison lineage, and zero reconciliation difference. |
+| Narrative evidence appears unrelated | The approval story does not match the active analytical scope. | Recheck the Analysis, Node, Factor, and member filters; do not combine unrelated Workspace narratives. |
 
 ## Practice
 
