@@ -14,6 +14,10 @@ This is an implementation journey, not a field-by-field reference. Each chapter 
 - what evidence proves the stage is complete;
 - which detailed configuration chapter to use when you need field guidance.
 
+The journey uses a strategy-led design method. Begin with the decisions leaders need to make, establish independent outcome totals, define the reusable calculation contract, and then work backward to the minimum sufficient Factors, Dimensions, grains, evidence, owners, and controls. Detailed data is the bottom-up proof of that approved contract—not the starting point for deciding what the model should explain.
+
+Treat documentation as part of implementation, not as a workshop-close activity. After each material design decision or test, update the relevant guide section and decision trail while preserving the original approach, the evidence that triggered a pivot, the confirmed replacement, and its validation consequences. This gives later implementers and agents the reasoning needed to distinguish intentional design from accidental configuration.
+
 ## Journey map
 
 | Stage | Outcome | Exit evidence |
